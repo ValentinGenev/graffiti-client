@@ -1,12 +1,13 @@
+import 'bootstrap/dist/css/bootstrap.min.css'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import './css/index.css'
-import Wall from './components/Wall'
+import Graffiti from './components/Graffiti'
 import reportWebVitals from './lib/reportWebVitals'
 
 ReactDOM.render(
     <React.StrictMode>
-        <Wall />
+        <Graffiti />
     </React.StrictMode>,
     document.getElementById('root')
 )

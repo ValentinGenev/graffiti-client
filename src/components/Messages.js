@@ -1,23 +1,31 @@
-import { useState, useEffect } from 'react'
-import { getMessages } from '../data/messages'
+import { Alert, Spinner } from './utils'
+import Message from './Message'
 
-export default function Messages() {
-    const [content, setContent] = useState()
-    
-    useEffect(() => {
-        // Initial content load
-        if (!content) getContent()
-    });
-    
-    async function getContent() {
-        setContent(await getMessages(6))
+export default function Messages(props) {
+    const { error, success, messages } = props
+    // TODO: do placeholders instead a spinner
+    let pageContent = <Spinner>Loading...</Spinner>
+
+    if (error) {
+        pageContent = <Alert type="danger">Something went wrong!</Alert>
     }
 
-    const messages = content?.messages?.map(entry => 
-        <li id={ entry.id }>{ entry.message }</li>
-    )
+    if (success) {
+        pageContent = messages.map(entry => {
+            return (
+                <Message
+                    key={ entry.id }
+                    postId={ entry.id }
+                    date={ entry.post_date }
+                    poster={ entry.poster }
+                    message={ entry.message } />
+            )
+        })
+    }
 
     return (
-        <ul>{ messages }</ul>
+        <ul className='Messages p-0'>
+            { pageContent }
+        </ul>
     )
 }
