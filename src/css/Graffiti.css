@@ -1,0 +1,5 @@
+.Graffiti > header,
+.Graffiti > footer,
+.Wall {
+    max-width: 980px;
+}
