@@ -1,4 +1,5 @@
-import { Alert, Spinner } from './utils'
+import Alert from './utils/Alert'
+import Spinner from './utils/Loader'
 import Message from './Message'
 
 export default function Messages(props) {

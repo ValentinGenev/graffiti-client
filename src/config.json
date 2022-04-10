@@ -1,3 +1,4 @@
 {
-    "POSTS_PER_PAGE": 6
+    "POSTS_PER_PAGE": 6,
+    "MAX_MESSAGE_LENGTH": 512
 }
