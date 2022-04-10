@@ -6,13 +6,14 @@ export default function Pagination(props) {
 
     const navItems = []
     for (let i = 0; i <= pagesCount + 1; i++) {
-        const { index, text, className } = setButtonData(i, pageIndex, pagesCount)
+        const { index, text, className, style } = setButtonData(i, pageIndex, pagesCount)
 
         navItems.push(
             <li
                 key={ i }
                 data-target-page={ index }
                 className={ className }
+                style={ style }
                 onClick={ () => loadPage(index) }><span className="page-link" role="button">{ text }</span></li>
         )
     }
@@ -30,14 +31,16 @@ function setButtonData(buttonIndex, pageIndex, pagesCount) {
             return {
                 index: pageIndex - 1,
                 text: 'Previous',
-                className: 'page-item ' + (pageIndex === 1 ? 'disabled' : '')
+                className: 'page-item ' + (pageIndex === 1 ? 'disabled' : ''),
+                style: { pointerEvents: pageIndex === 1 ? 'none' : 'initial' }
             }
 
         case pagesCount + 1:
             return {
                 index: pageIndex + 1,
                 text: 'Next',
-                className: 'page-item ' + (pageIndex === pagesCount ? 'disabled' : '')
+                className: 'page-item ' + (pageIndex === pagesCount ? 'disabled' : ''),
+                style: { pointerEvents: pageIndex === pagesCount ? 'none' : 'initial' }
             }
 
         default:

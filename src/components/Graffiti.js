@@ -1,3 +1,4 @@
+import MessageForm from './MessageForm'
 import Wall from './Wall'
 import '../css/Graffiti.css'
 
@@ -8,7 +9,10 @@ export default function Graffiti() {
                 <h1>graffiti</h1>
             </header>
 
-            <Wall />
+            <div className="container d-flex">
+                <Wall />
+                <MessageForm />
+            </div>
 
             <footer className="container mt-4">paint it dirty</footer>
         </main>

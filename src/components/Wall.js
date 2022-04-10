@@ -33,7 +33,7 @@ export default function Wall() {
     useEffect(() => loadPage(pageIndex), []);
 
     return (
-        <div className="Wall container">
+        <div className="Wall container me-4 p-0">
             <Pages
                 pages={ pages }
                 pageIndex={ pageIndex } />
