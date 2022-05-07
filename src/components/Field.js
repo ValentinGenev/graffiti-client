@@ -4,13 +4,16 @@ import globals from '../config.json'
 const { MAX_MESSAGE_LENGTH } = globals
 
 export default function Field(props) {
+    // FIXME: the validation prop needs a better name
     const { type, name, label, placeholder, help, validation } = props
     const [className, setClassName] = useState('form-control')
     const [feedback, setFeedback] = useState([])
 
-    const validateField = async event => {
-        setClassName('form-control validated')
-        setFeedback(createFeedback(event.target.value, validation))
+    const handleInput = async event => {
+        if (validation.length) {
+            setClassName('form-control validated')
+            setFeedback(updateUI(event.target.value, validation))
+        }
     }
 
     useEffect(() => {
@@ -21,6 +24,7 @@ export default function Field(props) {
         }
      }, [feedback, className, validation])
 
+    // TODO: continue thinking how to improve this
     const inputField = type !== 'textarea' ?
         <input
             type={ type }
@@ -28,14 +32,14 @@ export default function Field(props) {
             className= { className }
             aria-describedby="fieldHelp"
             placeholder={ placeholder }
-            onKeyUp={ validateField } /> :
+            onKeyUp={ handleInput } /> :
         <textarea
             id={ name }
             className= { className }
             aria-describedby="fieldHelp"
             placeholder={ placeholder }
             rows="9"
-            onKeyUp={ validateField } ></textarea>
+            onKeyUp={ handleInput } ></textarea>
 
     return (
         <div className="form-group mb-2">
@@ -47,28 +51,30 @@ export default function Field(props) {
     )
 }
 
-function createFeedback(value, validation) {
+function updateUI(value, validation) {
     const feedback = []
 
-    if (validation.length) {
-        for (const criteria in validation) {
-            switch (validation[criteria]) {
-                case 'isEmpty':
-                    !Boolean(value) &&
-                        feedback.push(<li key={ criteria }>What's on your mind?</li>)
-                    break;
-                case 'isLengthy':
-                    value.length > MAX_MESSAGE_LENGTH &&
-                        feedback.push(
-                            <li key={ criteria }>
-                                The message should be shorter than { MAX_MESSAGE_LENGTH } characters.
-                            </li>
-                        )
-                    break;
+    // TODO: can I split this into different functions
+    for (const criteria in validation) {
+        switch (validation[criteria]) {
+            case 'isEmpty':
+                if (!Boolean(value)) {
+                    feedback.push(<li key={ criteria }>What's on your mind?</li>)
+                }
+                break;
 
-                default:
-                    break;
-            }
+            case 'isLengthy':
+                if (value.length > MAX_MESSAGE_LENGTH) {
+                    feedback.push(
+                        <li key={ criteria }>
+                            The message should be shorter than { MAX_MESSAGE_LENGTH } characters.
+                        </li>
+                    )
+                }
+                break;
+
+            default:
+                break;
         }
     }
 
