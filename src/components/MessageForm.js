@@ -25,8 +25,7 @@ export default function MessageForm() {
         )
     }
     const resetForm = () => {
-        // FIXME: doesn't work still
-        setResetFlag(resetFlag => resetFlag++)
+        setResetFlag(!resetFlag)
         setTags([])
     }
 
