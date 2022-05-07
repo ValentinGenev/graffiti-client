@@ -1,52 +1,59 @@
 import { useState } from 'react'
 import { WithContext as ReactTags } from 'react-tag-input';
-import Field from './Field'
+import MessageField from './MessageField'
 import Alert from './utils/Alert'
+import { SimpleSpinner } from './utils/Loader';
 import { postMessage } from '../data/messages'
 import getMessage from '../utils/ui-messages'
 
 export default function MessageForm() {
+    const [resetFlag, setResetFlag] = useState(0)
     const [postStatus, setPostStatus] = useState()
+    const [message, setMessage] = useState('')
     const [tags, setTags] = useState([])
 
-    const handlePosting = async (event) => {
-        setPostStatus('Waiting')
+    const submitMessage = async event => {
+        event.preventDefault()
+        event.stopPropagation()
 
-        const response = await handleSubmit(event)
+        setPostStatus(<SimpleSpinner />)
+        const response = await handleSubmit({ message, tags }, resetForm)
         setPostStatus(
             <Alert type={ response.success ? 'success' : 'danger' }>
                 { getMessage(response.code) }
             </Alert>
         )
     }
+    const resetForm = () => {
+        // FIXME: doesn't work still
+        setResetFlag(resetFlag => resetFlag++)
+        setTags([])
+    }
 
-    const handleDelete = i => {
-        setTags(tags.filter((tag, index) => index !== i));
+    const deleteTag = i => {
+        setTags(tags.filter((_tag, index) => index !== i))
     }
-    const handleAddition = tag => {
-        setTags([...tags, tag]);
+    const addTag = tag => {
+        setTags([...tags, tag])
     }
-    const onClearAll = () => {
-        setTags([]);
+    const clearAllTags = () => {
+        setTags([])
     }
 
     return (
-        <form onSubmit={ handlePosting } className="Sketch container m-0 p-0" noValidate>
-            <Field
-                type="textarea"
-                name="message"
-                placeholder="What's on your mind?"
-                validation={ ['isEmpty', 'isLengthy'] }
-                required />
+        <form onSubmit={ submitMessage } className="Sketch container m-0 p-0" noValidate>
+            <MessageField
+                key={ resetFlag }
+                setValue={ setMessage } />
 
             <ReactTags
                 name="tags"
                 placeholder="Tag it e.g. tag, another tag"
                 tags={ tags }
-                delimiters={ [188] } // key codes for comma and enter
-                handleDelete={ handleDelete }
-                handleAddition={ handleAddition }
-                onClearAll={ onClearAll }
+                delimiters={ [188] } // the key code for comma
+                handleDelete={ deleteTag }
+                handleAddition={ addTag }
+                onClearAll={ clearAllTags }
                 inputFieldPosition="top"
                 classNames={{
                     tags: 'form-group mb-2',
@@ -68,20 +75,19 @@ export default function MessageForm() {
     )
 }
 
-async function handleSubmit(event) {
-    event.preventDefault()
-    event.stopPropagation()
-
-    // TODO: bubble the validation results and submit only if valid
+async function handleSubmit(content, resetForm) {
+    const { message, tags } = content
 
     const response = await postMessage({
         poster: 'anonymous',
-        message: event.target.message.value
+        message,
+        tags
     })
+    if (!response.success) {
+        return { success: false, code: response.error.code }
+    }
 
-    // TODO: reset form
+    resetForm()
 
-    return response.success ?
-        { success: true, code: 'MESSAGE_POSTED' } :
-        { success: false, code: response.error.code }
+    return { success: true, code: 'MESSAGE_POSTED' }
 }
