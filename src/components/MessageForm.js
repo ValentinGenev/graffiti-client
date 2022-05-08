@@ -78,7 +78,6 @@ async function handleSubmit(content, resetForm) {
     const { message, tags } = content
 
     const response = await postMessage({
-        poster: 'anonymous',
         message,
         tags
     })
