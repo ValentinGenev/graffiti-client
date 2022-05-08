@@ -4,7 +4,7 @@ import globals from '../config.json'
 const {  MAX_MESSAGE_LENGTH  } = globals
 
 export default function MessageField(props) {
-    const { label, help, setValue  } = props
+    const { setValue  } = props
     const [className, setClassName] = useState('form-control')
     const [feedback, setFeedback] = useState([])
 
@@ -23,20 +23,15 @@ export default function MessageField(props) {
          }
     }, [feedback, className])
 
-
-    const field = <textarea
-        id="message"
-        className={ className }
-        aria-describedby="fieldHelp"
-        placeholder="Write here"
-        rows="9"
-        onKeyUp={ handleInput } ></textarea>
-
     return (
         <div className="form-group mb-2">
-            { label && <label htmlFor={ 'message' }>{ label }</label> }
-            { field }
-            { help && <small id="fieldHelp" className="form-text text-muted">{ help }</small> }
+            <textarea
+                id="message"
+                className={ className }
+                aria-describedby="fieldHelp"
+                placeholder="Write here"
+                rows="9"
+                onKeyUp={ handleInput } ></textarea>
             <ul className="invalid-feedback">{ feedback }</ul>
         </div>
     )
