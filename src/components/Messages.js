@@ -18,7 +18,8 @@ export default function Messages(props) {
                     key={ entry.id }
                     postId={ entry.id }
                     date={ entry.post_date }
-                    message={ entry.message } />
+                    message={ entry.message }
+                    tags={entry.tags} />
             )
         })
     }
