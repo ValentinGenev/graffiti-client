@@ -75,7 +75,8 @@ export default function MessageForm() {
 }
 
 async function handleSubmit(content, resetForm) {
-    const { message, tags } = content
+    const { message, tags: tagsData } = content
+    const tags = tagsData.map(tag => tag.text)
 
     const response = await postMessage({
         message,

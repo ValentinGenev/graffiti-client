@@ -1,7 +1,7 @@
 import globals from '../config.json'
+import { API_URL } from '../utils/constants'
 
 const { POSTS_PER_PAGE } = globals
-const API_URL = `http://${process.env.REACT_APP_API_HOST}:${process.env.REACT_APP_API_PORT}/api/messages`
 
 export async function getContent(page = 1, postsPerPage = POSTS_PER_PAGE) {
     try {
