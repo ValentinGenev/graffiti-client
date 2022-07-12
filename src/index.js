@@ -1,13 +1,16 @@
 import 'bootstrap/dist/css/bootstrap.min.css'
 import React from 'react'
 import ReactDOM from 'react-dom'
-import './css/index.css'
-import Graffiti from './components/Graffiti'
+import { BrowserRouter } from 'react-router-dom'
+import './css/main.css'
+import App from './App'
 import reportWebVitals from './lib/reportWebVitals'
 
 ReactDOM.render(
     <React.StrictMode>
-        <Graffiti />
+        <BrowserRouter>
+            <App />
+        </BrowserRouter>
     </React.StrictMode>,
     document.getElementById('root')
 )

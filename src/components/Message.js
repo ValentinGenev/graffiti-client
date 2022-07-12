@@ -1,11 +1,11 @@
-import { API_URL } from '../utils/constants'
+import { Link } from 'react-router-dom'
 
 export default function Message(props) {
     const { postId, date, message, tags } = props
     // TODO: show how much time has passed
     const postDate = new Date(date)
     const tagAnchors = tags.map((tag, index) => {
-        return <a key={ index } href={ `${ API_URL }/all?tag=${ tag }` } className="card-link">{ tag }</a>
+        return <Link key={ index } to={ `/tag/${ tag }` } className="card-link">{ tag }</Link>
     })
 
     return (
