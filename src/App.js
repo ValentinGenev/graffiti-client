@@ -6,9 +6,9 @@ import Tag from './routes/Tag'
 export default function App() {
     return (
         <Routes>
-            <Route path='/' element={ <Home /> }>
+            <Route path="/" element={ <Home /> }>
                 <Route index element={ <Index /> } />
-                <Route path='tag/*' element={ <Tag /> } />
+                <Route path="tag" element={ <Tag /> } />
             </Route>
         </Routes>
     )

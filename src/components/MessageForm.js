@@ -40,6 +40,7 @@ export default function MessageForm() {
     }
 
     // FIXME: pressing enter while in the tags field submits the form
+    // FIXME: tags field is auto targeted on component load
 
     return (
         <form onSubmit={ submitMessage } className="Sketch container m-0 p-0" noValidate>
