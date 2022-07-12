@@ -39,6 +39,8 @@ export default function MessageForm() {
         setTags([])
     }
 
+    // FIXME: pressing enter while in the tags field submits the form
+
     return (
         <form onSubmit={ submitMessage } className="Sketch container m-0 p-0" noValidate>
             <MessageField

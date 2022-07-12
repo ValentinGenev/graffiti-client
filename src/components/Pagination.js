@@ -19,7 +19,7 @@ export default function Pagination(props) {
     }
 
     return (
-        <nav className='Pagination d-flex justify-content-end' aria-label="pages navigation">
+        <nav className='Pagination d-flex justify-content-start' aria-label="pages navigation">
             <ul className='pagination'>{ navItems }</ul>
         </nav>
     )
