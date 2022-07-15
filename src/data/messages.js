@@ -4,8 +4,6 @@ import { API_URL } from '../utils/constants'
 const { POSTS_PER_PAGE } = globals
 
 export async function getContent(args = { page: 1, postsPerPage: POSTS_PER_PAGE, tag: '' }) {
-    console.log(args)
-
     try {
         const { page, postsPerPage, tag } = args
         const response =
