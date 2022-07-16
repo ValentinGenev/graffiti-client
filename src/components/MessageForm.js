@@ -39,9 +39,6 @@ export default function MessageForm() {
         setTags([])
     }
 
-    // FIXME: pressing enter while in the tags field submits the form
-    // FIXME: tags field is auto targeted on component load
-
     return (
         <form onSubmit={ submitMessage } className="Sketch container m-0 p-0" noValidate>
             <MessageField
@@ -52,7 +49,7 @@ export default function MessageForm() {
                 name="tags"
                 placeholder="Tag it e.g. tag, another tag"
                 tags={ tags }
-                delimiters={ [188] } // the key code for comma
+                delimiters={ [188, 9, 13] } // the key code for comma, tab and enter
                 handleDelete={ deleteTag }
                 handleAddition={ addTag }
                 onClearAll={ clearAllTags }
@@ -68,6 +65,7 @@ export default function MessageForm() {
                 }}
                 allowUnique={ false }
                 allowDragDrop={ false }
+                autofocus={ false }
                 clearAll={ true } />
 
             { postStatus }
