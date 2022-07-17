@@ -1,56 +1,37 @@
-import {  useState, useEffect  } from 'react'
-import globals from '../config.json'
-
-const {  MAX_MESSAGE_LENGTH  } = globals
+import { useEffect, useRef, useState } from "react"
+import getMessage from '../utils/ui-messages'
 
 export default function MessageField(props) {
-    const { setValue  } = props
+    const { setMessage, feedback } = props
     const [className, setClassName] = useState('form-control')
-    const [feedback, setFeedback] = useState([])
-
-    const handleInput = async event => {
-        setClassName('form-control validated')
-        setFeedback(validate(event.target.value))
-
-        setValue(event.target.value)
-    }
+    const isInitial = useRef(true)
 
     useEffect(() => {
-        if (className.indexOf('validated') >= 0) {
-            feedback.length ?
-                setClassName('form-control is-invalid') :
-                setClassName('form-control is-valid')
-         }
-    }, [feedback, className])
+        if (!isInitial.current) {
+            const validationClass = feedback.length ? 'is-invalid' : 'is-valid'
+            setClassName(['form-control', validationClass].join(' '))
+        }
+    }, [feedback])
+
+    const handleInput = event => {
+        isInitial.current = false
+        setMessage(event.target.value)
+    }
+
+    const feedbackMessages = feedback.map((message, index) => (
+        <li key={index}>{getMessage(message)}</li>
+    ))
 
     return (
         <div className="form-group mb-2">
             <textarea
                 id="message"
-                className={ className }
+                className={className}
                 aria-describedby="fieldHelp"
                 placeholder="Write here"
                 rows="9"
-                onKeyUp={ handleInput } ></textarea>
-            <ul className="invalid-feedback">{ feedback }</ul>
+                onBlur={handleInput} ></textarea>
+            <ul className="invalid-feedback">{feedbackMessages}</ul>
         </div>
     )
- }
-
-function validate(value) {
-    const feedback = []
-
-    if (!Boolean(value)) {
-        feedback.push(<li key={ 'isEmpty' }>What's on your mind?</li>)
-    }
-
-    if (value.length > MAX_MESSAGE_LENGTH) {
-        feedback.push(
-            <li key={ 'isLengthy' }>
-                The message should be shorter than { MAX_MESSAGE_LENGTH } characters.
-            </li>
-        )
-    }
-
-    return feedback
- }
+}
