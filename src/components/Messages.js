@@ -19,7 +19,7 @@ export default function Messages(props) {
                     postId={ entry.id }
                     date={ entry.post_date }
                     message={ entry.message }
-                    tags={entry.tags} />
+                    tags={entry?._embedded?.tags} />
             )
         })
     }

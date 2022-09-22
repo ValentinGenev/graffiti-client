@@ -5,7 +5,7 @@ export default function Message(props) {
     // TODO: show how much time has passed
     const postDate = new Date(date)
     const tagAnchors = tags?.map((tag, index) => {
-        return <Link key={ index } to={ `/tag?tagName=${ tag }` } className="card-link">{ tag }</Link>
+        return <Link key={ index } to={ tag.href } className="card-link">{ tag.name }</Link>
     })
 
     return (

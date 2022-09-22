@@ -21,10 +21,11 @@ export default function Wall() {
             setPages(pages => addPage(index, { success: false }, pages))
             setPageIndex(index)
 
-            const content = await getContent({
+            const args = {
                 page: index,
-                tag: searchParams?.get('tagName')
-            })
+                tag: searchParams?.get('tag')
+            }
+            const content = await getContent(args)
             if (content.success) {
                 setPages(pages => addPage(index, content, pages))
                 setPagesCount(content.pagination.pagesCount)
