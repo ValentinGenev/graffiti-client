@@ -7,9 +7,9 @@ export async function getContent(args = { page: 1, postsPerPage: POSTS_PER_PAGE,
     try {
         const { page, postsPerPage, tag } = args
         const response =
-            await fetch(`${ API_URL }/all${
-                ( page ? '/' + page + '/' : '' ) +
-                ( '?postsPerPage=' + ( postsPerPage ? postsPerPage : POSTS_PER_PAGE ) ) +
+            await fetch(`${ API_URL }/messages${
+                ( page ? '/?pageIndex=' + page : '?pageIndex=1' ) +
+                ( '&postsPerPage=' + ( postsPerPage ? postsPerPage : POSTS_PER_PAGE ) ) +
                 ( tag ? '&tag=' + tag : '')
             }`)
 
@@ -31,7 +31,7 @@ export async function postMessage(message) {
     }
 
     try {
-        const request = await fetch(`${API_URL}/new`, data)
+        const request = await fetch(`${API_URL}/messages`, data)
         const response = await request.json()
 
         return response
