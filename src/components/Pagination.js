@@ -1,5 +1,8 @@
+import { Link } from 'react-router-dom'
+import { buildRelativeUrl } from '../lib/crud'
+
 export default function Pagination(props) {
-    const { loadPage, pageIndex, pagesCount } = props
+    const { pageIndex, pagesCount } = props.data
     if (!pageIndex || !pagesCount) {
         return ''
     }
@@ -7,14 +10,15 @@ export default function Pagination(props) {
     const navItems = []
     for (let i = 0; i <= pagesCount + 1; i++) {
         const { index, text, className, style } = setButtonData(i, pageIndex, pagesCount)
+        const linkUrl = buildRelativeUrl('messages', [`pageIndex=${index}`])
 
         navItems.push(
-            <li
-                key={ i }
-                data-target-page={ index }
-                className={ className }
-                style={ style }
-                onClick={ () => loadPage(index) }><span className="page-link" role="button">{ text }</span></li>
+            <li key={ i } className={ className } style={ style }>
+                <Link
+                    key={ index }
+                    to={{ pathname: linkUrl }}
+                    className="page-link" role="button">{ text }</Link>
+            </li>
         )
     }
 

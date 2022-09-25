@@ -46,6 +46,11 @@ export function buildUrl(resource, params = []) {
     return `${API_URL}/${resource}/${query}`
 }
 
+export function buildRelativeUrl(resource, params = []) {
+    const query = params.length ? `?${params.join('&')}` : ''
+    return `/${resource}/${query}`
+}
+
 function buildError(error) {
     return { error: error.message, success: false }
 }

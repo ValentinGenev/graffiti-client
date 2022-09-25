@@ -1,5 +1,5 @@
-import MessageForm from '../components/MessageForm'
 import Wall from '../components/Wall'
+import MessageForm from '../components/MessageForm'
 
 export default function Index() {
     return (
