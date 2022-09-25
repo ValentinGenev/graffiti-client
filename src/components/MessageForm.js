@@ -3,9 +3,9 @@ import { WithContext as ReactTags } from 'react-tag-input';
 import MessageField from './MessageField'
 import Alert from './utils/Alert'
 import { SimpleSpinner } from './utils/Loader';
-import { postMessage } from '../data/messages'
 import getMessage from '../utils/ui-messages'
 import globals from '../config.json'
+import { buildUrl, post } from '../lib/crud';
 
 export default function MessageForm() {
     const [resetFlag, setResetFlag] = useState(0)
@@ -108,7 +108,8 @@ async function handleSubmit(content) {
     const { message, tags: tagsData } = content
     const tags = tagsData.map(tag => tag.text)
 
-    const response = await postMessage({ message, tags })
+    // TODO: get the post url from the HATEAOS links from the context
+    const response = await post(buildUrl('messages'), { message, tags })
     if (!response.success) {
         return { success: false, code: response.error.code }
     }
