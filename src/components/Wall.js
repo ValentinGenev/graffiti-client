@@ -1,71 +1,33 @@
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useSearchParams} from 'react-router-dom'
-import Pages from './Pages'
 import Messages from './Messages'
 import Pagination from './Pagination'
 import { getMessages, checkParams } from '../data/messages'
 
 export default function Wall() {
-    const isInitial = useRef(true)
-    const [searchParams] = useSearchParams();
-    const [pagesCount, setPagesCount] = useState()
-    const [pageIndex, setPageIndex] = useState(1)
-    const [pages, setPages] = useState([undefined, <Messages key={ 1 } success={ false } />])
+    const [searchParams] = useSearchParams()
+    const [content, setContent] = useState({
+        success: false,
+        pagination: { pageIndex: 1 }
+    })
 
-    const loadPage = useCallback(async (index) => {
-        if (checkIfLoaded(pages, index) && !checkIfHasTag(searchParams)) {
-            setPageIndex(index)
+    const loadPage = useCallback(async () => {
+        const messages = await getMessages(checkParams(searchParams))
+        if (messages.success) {
+            setContent(messages)
         }
-        else {
-            setPages(pages => addPage(index, { success: false }, pages))
-            setPageIndex(index)
+    }, [searchParams])
 
-            const content = await getMessages(checkParams(searchParams))
-            if (content.success) {
-                setPages(pages => addPage(index, content, pages))
-                setPagesCount(content.pagination.pagesCount)
-            }
-        }
-    }, [pages, searchParams])
-
-    useEffect(() => {
-        if (isInitial.current) {
-            loadPage(pageIndex)
-            isInitial.current = false
-        }
-    }, [isInitial, pageIndex, loadPage]);
+    useEffect(loadPage, [loadPage]);
 
     return (
         <div className="Wall container ms-0 me-4 p-0">
-            <Pages
-                pages={ pages }
-                pageIndex={ pageIndex } />
-
-            <Pagination
-                loadPage={ loadPage }
-                pageIndex={ pageIndex }
-                pagesCount={ pagesCount } />
+            <Messages
+                key={ content.pagination.pageIndex }
+                error={ content.error }
+                success={ content.success }
+                messages={ content.messages } />
+            <Pagination data={ content.pagination } />
         </div>
     )
-}
-
-function addPage(index, content, pages) {
-    const { error, success, messages } = content
-    const newPages = [...pages]
-
-    newPages[index] =
-        <Messages
-            key={ index }
-            error={ error }
-            success={ success }
-            messages={ messages } />
-
-    return newPages
-}
-
-function checkIfLoaded(pages, index) {
-    return Boolean(pages[index] && pages[index].props.success)
-}
-function checkIfHasTag(searchParams) {
-    return searchParams?.get('tagName')
 }
