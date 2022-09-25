@@ -3,10 +3,9 @@ import { useSearchParams} from 'react-router-dom'
 import Pages from './Pages'
 import Messages from './Messages'
 import Pagination from './Pagination'
-import { getContent } from '../data/messages'
+import { getMessages, checkParams } from '../data/messages'
 
 export default function Wall() {
-    // TODO: introduce filters and remove the tags from here
     const isInitial = useRef(true)
     const [searchParams] = useSearchParams();
     const [pagesCount, setPagesCount] = useState()
@@ -21,11 +20,7 @@ export default function Wall() {
             setPages(pages => addPage(index, { success: false }, pages))
             setPageIndex(index)
 
-            const args = {
-                page: index,
-                tag: searchParams?.get('tag')
-            }
-            const content = await getContent(args)
+            const content = await getMessages(checkParams(searchParams))
             if (content.success) {
                 setPages(pages => addPage(index, content, pages))
                 setPagesCount(content.pagination.pagesCount)

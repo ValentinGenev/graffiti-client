@@ -1,7 +1,7 @@
 import { Routes, Route } from 'react-router-dom'
 import Home from './routes/Home'
 import Index from './routes/Index'
-import Messages from './routes/Tag'
+import Messages from './routes/Messages'
 
 export default function App() {
     return (
