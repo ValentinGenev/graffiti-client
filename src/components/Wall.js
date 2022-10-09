@@ -15,7 +15,8 @@ export default function Wall() {
         setContent(content)
 
         if (content.pagination) {
-            setPagination(<Pagination data={ content.pagination } />)
+            setPagination(<Pagination data={ content.pagination }
+                searchParams={ searchParams } />)
         }
     }, [searchParams])
 
