@@ -3,7 +3,7 @@ import { buildRelativeUrl } from '../lib/crud'
 
 export default function Pagination(props) {
     const { pageIndex, pagesCount, _links } = props.data
-    const params = Array.from(props.searchParams.entries())
+    const searchParams = Array.from(props.searchParams.entries())
 
     if (!pageIndex || !pagesCount) {
         return ''
@@ -13,7 +13,7 @@ export default function Pagination(props) {
         <nav className='Pagination d-flex justify-content-start' aria-label="pages navigation">
             <ul className='pagination'>
                 { createAdjacent(_links.prev, pageIndex - 1) }
-                { createNavItems(props.data, params) }
+                { createNavItems(props.data, searchParams) }
                 { createAdjacent(_links.next, pageIndex + 1) }
             </ul>
         </nav>
@@ -56,7 +56,7 @@ function createAdjacent(link, key) {
     if (!link) return ''
 
     return (
-        <li key={ key }>
+        <li key={ key } className="page-item">
             <Link
                 to={ link.href }
                 className="page-link" role="button">{ link.name }</Link>
