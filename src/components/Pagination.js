@@ -12,9 +12,9 @@ export default function Pagination(props) {
     return (
         <nav className='Pagination d-flex justify-content-start' aria-label="pages navigation">
             <ul className='pagination'>
-                { _links.prev ? createAdjacent(_links.prev, pageIndex - 1) : '' }
+                { createAdjacent(_links.prev, pageIndex - 1) }
                 { createNavItems(props.data, params) }
-                { _links.next ? createAdjacent(_links.next, pageIndex + 1) : '' }
+                { createAdjacent(_links.next, pageIndex + 1) }
             </ul>
         </nav>
     )
@@ -22,13 +22,16 @@ export default function Pagination(props) {
 
 function createNavItems(data, params) {
     const { pageIndex, pagesCount } = data
-    const navItems = []
 
+    if (pagesCount === 1) return []
+
+    const navItems = []
     for (let i = 1; i <= pagesCount; i++) {
         const linkUrl = buildRelativeUrl('messages', setNavItemParams(params, i))
+        const itemClass = `page-item ${ i === pageIndex ? 'active' : '' }`
 
         navItems.push(
-            <li key={ i } className={ i === pageIndex ? 'active' : '' }>
+            <li key={ i } className={ itemClass }>
                 <Link
                     to={{ pathname: linkUrl }}
                     className="page-link" role="button">{ i }</Link>
@@ -50,6 +53,8 @@ function setNavItemParams(params, index) {
 }
 
 function createAdjacent(link, key) {
+    if (!link) return ''
+
     return (
         <li key={ key }>
             <Link
