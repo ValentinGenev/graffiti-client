@@ -17,14 +17,12 @@ export async function getMessages(searchParams) {
 }
 
 export function checkParams(searchParams) {
-    const params = new URLSearchParams(searchParams)
-
-    if (!params.has('pageIndex')) {
-        params.append('pageIndex', 1)
+    if (!searchParams.has('pageIndex')) {
+        searchParams.append('pageIndex', 1)
     }
-    if (!params.has('postsPerPage')) {
-        params.append('postsPerPage', POSTS_PER_PAGE)
+    if (!searchParams.has('postsPerPage')) {
+        searchParams.append('postsPerPage', POSTS_PER_PAGE)
     }
 
-    return params
+    return searchParams
 }

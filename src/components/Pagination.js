@@ -3,18 +3,29 @@ import { buildRelativeUrl } from '../lib/crud'
 
 export default function Pagination(props) {
     const { pageIndex, pagesCount, _links } = props.data
-
-    // FIXME: fix the pagination when another filter is applied (tag, poster)
+    const params = Array.from(props.searchParams.entries())
 
     if (!pageIndex || !pagesCount) {
         return ''
     }
 
-    const prevPage = _links.prev ? createAdjacent(_links.prev, pageIndex - 1) : ''
-    const nextPage = _links.next ? createAdjacent(_links.next, pageIndex + 1) : ''
+    return (
+        <nav className='Pagination d-flex justify-content-start' aria-label="pages navigation">
+            <ul className='pagination'>
+                { _links.prev ? createAdjacent(_links.prev, pageIndex - 1) : '' }
+                { createNavItems(props.data, params) }
+                { _links.next ? createAdjacent(_links.next, pageIndex + 1) : '' }
+            </ul>
+        </nav>
+    )
+}
+
+function createNavItems(data, params) {
+    const { pageIndex, pagesCount } = data
     const navItems = []
+
     for (let i = 1; i <= pagesCount; i++) {
-        const linkUrl = buildRelativeUrl('messages', [`pageIndex=${i}`])
+        const linkUrl = buildRelativeUrl('messages', setNavItemParams(params, i))
 
         navItems.push(
             <li key={ i } className={ i === pageIndex ? 'active' : '' }>
@@ -24,16 +35,18 @@ export default function Pagination(props) {
             </li>
         )
     }
+    return navItems
+}
 
-    return (
-        <nav className='Pagination d-flex justify-content-start' aria-label="pages navigation">
-            <ul className='pagination'>
-                { prevPage }
-                { navItems }
-                { nextPage }
-            </ul>
-        </nav>
-    )
+function setNavItemParams(params, index) {
+    const navParams = []
+
+    for (const param of params) {
+        let [key, value] = param
+        if (key === 'pageIndex') value = index
+        navParams.push(`${key}=${value}`)
+    }
+    return navParams
 }
 
 function createAdjacent(link, key) {
